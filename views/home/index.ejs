@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <img src="Apple-logo.png" class="object-scale-down h-12 w-21" />
+    <h1 class="text-left font-extrabold p-5">Site test</h1>
+</head>
+<body class="min-h-screen bg-gradient-to-r from-indigo-600 to-pink-500 text-white flex flex-col items-center py-10">
+    <h1 class="text-black-400 text-4xl font-extrabold p-10  "> Ajouter un livre</h1>
+    Book name :
+    <input type="text" id="nom" class="form">
+    <br>
+    <br>
+    Author :
+    <input type="text" id="author" class="form">
+    <br>
+    <br>
+    Year :
+    <input type="text" id="year" class="form">
+    <br>
+    <br>
+    <button class="bg-blue-500 px-6 py-1 text-white rounded-md" onclick="showBook()"> Ajouter un livre</button>
+    <br>
+    <br>
+    <h1 class="text-black-400 text-2xl font-extrabold py-5" > Liste des livres</h1>
+    <ul id="bookList"></ul>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+<script>
+let local_storage_key = "livre";
+
+    // Affiche le livre après que l'utilisateur a saisi les détails
+    function showBook() {
+        let nomDuLivre = document.getElementById("nom").value;
+        let nomAuteur = document.getElementById("author").value;
+        let anneeLivre = document.getElementById("year").value;
+    
+        addBook(nomDuLivre, nomAuteur, anneeLivre);
+    }
+    
+    // Ajoute un livre à la liste et le stocke dans le local storage
+    function addBook(nomDuLivre, nomAuteur, anneeLivre) {
+        let bookList = document.getElementById("bookList");
+    
+        // Créer un nouvel objet livre
+        let newBook = {
+            titre: nomDuLivre,
+            auteur: nomAuteur,
+            annee: anneeLivre
+        };
+    
+        // Récupérer les livres existants du local storage
+        let books = JSON.parse(localStorage.getItem(local_storage_key)) || [];
+    
+        // Ajouter le nouveau livre à la liste
+        books.push(newBook);
+    
+        // Mettre à jour le local storage
+        localStorage.setItem(local_storage_key, JSON.stringify(books));
+    
+        // Afficher le nouveau livre
+        bookList.innerHTML += `<p>Titre: ${nomDuLivre}, Auteur: ${nomAuteur}, Année: ${anneeLivre}</p>`;
+    }
+    
+    // Charger les livres depuis le local storage et les afficher lors du chargement de la page
+    function loadBooks() {
+        let bookList = document.getElementById("bookList");
+        let books = JSON.parse(localStorage.getItem(local_storage_key)) || [];
+    
+        // Afficher chaque livre
+        books.forEach(book => {
+            bookList.innerHTML += `<p>Titre: ${book.titre}, Auteur: ${book.auteur}, Année: ${book.annee}</p>`;
+        });
+    }
+    
+    // Appeler loadBooks lorsque la page se charge
+    window.onload = loadBooks;
+    </script>
